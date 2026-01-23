@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react"
 import type { List } from "../../view/List"
+import axios from "axios"
+import { useQuery } from "@tanstack/react-query"
 
 
 interface ListProps {
@@ -7,9 +9,21 @@ interface ListProps {
   setValueList: React.Dispatch<React.SetStateAction<List[]>>
 }
 
+
 function TodoList({data, setValueList}:ListProps ) {
   const [idList, setIdList] = useState('')
   const [value, setValue] = useState('')
+
+
+  const fetchTodos = async (): Promise<any> => {
+  const response = await axios.get(`https://rickandmortyapi.com/api/character/?page=0`)
+  return response.data
+}
+
+  const api = useQuery({
+    queryKey: ['todos'],
+    queryFn: () => fetchTodos(),
+  })
 
   const handleClickEdit = (id: string, name: string) => {
     setIdList(id)
@@ -35,10 +49,11 @@ function TodoList({data, setValueList}:ListProps ) {
         
   }
 
-    useEffect(() => {
+    useEffect( () => {
+
  const list = JSON.parse(sessionStorage.getItem("list") || "null");
 
-  if(list.length > 0 && list) setValueList(list)
+  if(list && list.length > 0) setValueList(list)
 
   }, []);
 
@@ -69,6 +84,11 @@ function TodoList({data, setValueList}:ListProps ) {
     </li>
   ))}
 </ul>
+  {api.data?.results.map((e) => (
+    <div>
+      <span>{e.name}</span>
+    </div>
+  ))}
     </section>
   )
 }
