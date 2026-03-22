@@ -53,7 +53,6 @@ function TodoList({ data, setValueList }: ListProps) {
 
   return (
     <section>
-      <h1> não é para aparecer em main</h1>
       <ul>
         {data.map((list) => (
           <li key={list.id} className="main-todo-list">
