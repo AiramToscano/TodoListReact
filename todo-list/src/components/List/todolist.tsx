@@ -84,9 +84,9 @@ function TodoList({ data, setValueList }: ListProps) {
           </li>
         ))}
       </ul>
-      {api.data?.results.map((e) => (
+      {api.data?.results.map((e, index) => (
         <div>
-          <span>{e.name}</span>
+          <span>{`${e.name} - ${index}`}</span>
         </div>
       ))}
     </section>
